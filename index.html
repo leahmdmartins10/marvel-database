@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script defer src="js/main.js"></script>
+    <title>Marvel Database</title>
+</head>
+
+<body>
+    <h1>Welcome to the Marvel Database!</h1>
+    <h2>Here you can do the following things:</h2>
+    <ul id="index">
+        <li>Search for a character</li>
+        <li>Search for a comic</li>
+        <li>Search by Creators</li>
+        <li>Search Marvel Events</li>
+        <li>Search Marvel Series</li>
+        <li>Search Marvel Stories</li>
+    </ul>
+    <input type="text" id="search-characterList" placeholder="Search a Character...">
+    <select id="search-characterListDropdown">
+        <option value="">Character List</option>
+    </select>
+
+    <input type="text" id="search-comicList" placeholder="Search a Comic...">
+    <select id="search-comicListDropdown">
+        <option value="">Comic List</option>
+    </select>
+
+    <div class="loading-spinner"></div>
+</body>
+
+</html>
