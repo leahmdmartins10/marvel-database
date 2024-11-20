@@ -1,8 +1,9 @@
+require('dotenv').config();
 
 // constants for the API keys
 const ts = '1';
-const publicAPIKey = "7c2b5e5b2ed22a552584fa44f4b8ec1a";
-const privateAPIKey = "605df6875e988ab31e5cf7493c1550ed1013c2a3";
+const publicAPIKey = process.env.PUBLIC_API_KEY;
+const privateAPIKey = process.env.PRIVATE_API_KEY;
 const hash = CryptoJS.MD5(ts + privateAPIKey + publicAPIKey).toString();
 const url = `https://gateway.marvel.com/v1/public/characters?ts=${ts}&apikey=${publicAPIKey}&hash=${hash}`;
 
