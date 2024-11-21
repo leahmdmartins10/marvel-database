@@ -1,16 +1,4 @@
-require('dotenv').config();
-
-// constants for the API keys
-const ts = '1';
-const publicAPIKey = process.env.PUBLIC_API_KEY;
-const privateAPIKey = process.env.PRIVATE_API_KEY;
-const hash = CryptoJS.MD5(ts + privateAPIKey + publicAPIKey).toString();
-const url = `https://gateway.marvel.com/v1/public/characters?ts=${ts}&apikey=${publicAPIKey}&hash=${hash}`;
-
-// to fetch the character list from the API it requires:
-// ts: a timestamp (an arbirary string, usually a number)
-// apikey: the public key
-// hash: a hash of ts + privatekey + publickey
+// main JS file - Frontend logic
 
 // DOM elements
 const characterList = document.querySelector('#search-characterListDropdown');
@@ -21,6 +9,12 @@ const comicSearch = document.querySelector('#search-comicList');
 
 let characters = [];
 let comics = [];
+
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded...');
+})
+
+
 
 window.onload = () => {
     getCharacters();
@@ -34,6 +28,7 @@ characterSearch.addEventListener('input', () => {
 });
 
 characterList.addEventListener('change', () => {
+    console.log("Character selected: " + characterList.value);
     const characterId = characterList.value;
     const characterImg = document.createElement('img');
     characterImg.src = characters.find(character => character.id == characterId).thumbnail.path + '.' + characters.find(character => character.id == characterId).thumbnail.extension;

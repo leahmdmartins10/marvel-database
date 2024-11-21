@@ -6,97 +6,95 @@
 }
 
 body {
-    font-family: 'Roboto', sans-serif;
-    background: url('marvelAPIbackground.jpg') no-repeat center center fixed; /* Marvel-themed background image */
+    font-family: 'Marvel', sans-serif;
+    background: url('/marvelAPIbackground.jpg') no-repeat center center fixed; /* Marvel-themed background */
     background-size: cover;
     color: #fff;
     display: flex;
-    justify-content: center;
+    flex-direction: column; /* Stack elements vertically */
     align-items: center;
     min-height: 100vh;
     padding: 20px;
-    overflow: hidden;
-    background-blur: 10px;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    overflow-y: auto; /* Allow vertical scrolling */
 }
 
-.container {
-    background: rgba(0, 0, 0, 0.7); /* Semi-transparent overlay for contrast */
-    border-radius: 10px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
-    width: 100%;
-    max-width: 900px;
-    padding: 40px;
-    text-align: center;
-}
-
+/* Headings */
 h1 {
     font-size: 3rem;
-    color: #FF6A00; /* Bold Marvel-like orange */
-    font-weight: 700;
+    color: #FF0000; /* Marvel red */
+    font-weight: 900;
     margin-bottom: 20px;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.9);
 }
 
 h2 {
+    font-size: 1.5rem;
+    color: #d3d3d3;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* List */
+ul#index {
+    list-style-type: none;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+ul#index li {
     font-size: 1.2rem;
+    margin-bottom: 10px;
     color: #f1f1f1;
-    margin-bottom: 30px;
-    font-weight: 500;
-    letter-spacing: 1px;
 }
 
-/* Search Containers */
-.search-container {
-    margin-bottom: 30px;
-    position: relative;
-}
-
-.search-container input,
-.search-container select {
-    width: 100%;
-    max-width: 450px;
-    padding: 15px;
-    font-size: 18px;
-    border: none;
+/* Search Container */
+input[type="text"],
+select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
     border-radius: 8px;
-    outline: none;
     background-color: rgba(255, 255, 255, 0.9);
     color: #333;
-    transition: transform 0.3s ease-in-out;
     font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    outline: none;
+    transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
-.search-container input:focus,
-.search-container select:focus {
-    background-color: #FF6A00;
-    color: white;
+/* Input Fields and Dropdowns Inline Styling */
+input[type="text"] {
+    flex: 1; /* Let the input take more space */
+    max-width: 300px; /* Optional: Limit input size */
+}
+
+select {
+    flex: 0; /* Prevent stretching */
+    max-width: 200px; /* Optional: Limit dropdown size */
+}
+
+/* Search Area Container */
+.search-area {
+    display: flex; /* Arrange input and dropdown inline */
+    gap: 10px; /* Space between input and dropdown */
+    margin-bottom: 30px;
+    width: 100%; /* Ensure the area takes full width */
+    max-width: 900px; /* Optional: Limit max width */
+    justify-content: space-between; /* Evenly distribute items */
+    align-items: center; /* Align items vertically */
+}
+
+/* Input and Dropdown Focus & Hover */
+input[type="text"]:focus,
+select:focus {
+    background-color: #FF0000;
+    color: #fff;
     transform: scale(1.05);
 }
 
-#search-characterListDropdown,
-#search-comicListDropdown {
-    width: 100%;
-    max-width: 450px;
-    height: 200px;
-    margin-top: 10px;
-    background-color: rgba(255, 255, 255, 0.8);
-    border-radius: 8px;
-    overflow-y: auto;
-    color: #333;
-    font-size: 14px;
-    transition: border 0.3s ease;
-    font-weight: bold;
-}
-
-#search-characterListDropdown option,
-#search-comicListDropdown option {
-    padding: 12px;
-    background-color: rgba(255, 255, 255, 0.9);
-}
-
-#search-characterListDropdown option:hover,
-#search-comicListDropdown option:hover {
-    background-color: #FF6A00;
+select option:hover {
+    background-color: #FF0000;
     color: white;
 }
 
@@ -107,7 +105,7 @@ h2 {
     width: 50px;
     height: 50px;
     border: 5px solid #ddd;
-    border-top: 5px solid #FF6A00;
+    border-top: 5px solid #FF0000;
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
@@ -117,45 +115,15 @@ h2 {
     100% { transform: rotate(360deg); }
 }
 
-/* Button Styles */
-button {
-    background-color: #FF6A00;
-    color: white;
-    padding: 14px 30px;
-    font-size: 16px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 20px;
-}
-
-button:hover {
-    background-color: #ff5300;
-}
-
-button:disabled {
-    background-color: #ddd;
-    cursor: not-allowed;
-}
-
-/* Responsive Styles */
+/* Responsive Design */
 @media (max-width: 768px) {
-    .container {
-        padding: 20px;
+    .search-area {
+        flex-direction: column; /* Stack inputs and dropdowns vertically */
+        gap: 20px;
     }
 
-    h1 {
-        font-size: 2.5rem;
-    }
-
-    .search-container input,
-    .search-container select {
-        width: 100%;
-    }
-
-    #search-characterListDropdown,
-    #search-comicListDropdown {
-        max-width: 100%;
+    input[type="text"],
+    select {
+        width: 100%; /* Full width on smaller screens */
     }
 }

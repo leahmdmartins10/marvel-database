@@ -21,17 +21,23 @@
         <li>Search Marvel Series</li>
         <li>Search Marvel Stories</li>
     </ul>
-    <input type="text" id="search-characterList" placeholder="Search a Character...">
-    <select id="search-characterListDropdown">
-        <option value="">Character List</option>
+
+    <label for="categorySelect">Select a category:</label>
+    <select id="categorySelect">
+        <option value="character">Character</option>
+        <option value="comic">Comic</option>
+        <option value="creator">Creator</option>
+        <option value="event">Event</option>
+        <option value="series">Series</option>
+        <option value="story">Story</option>
     </select>
 
-    <input type="text" id="search-comicList" placeholder="Search a Comic...">
-    <select id="search-comicListDropdown">
-        <option value="">Comic List</option>
-    </select>
-
-    <div class="loading-spinner"></div>
+    <div class="search-area">
+        <input type="text" id="search-characterList" placeholder="Search for a character">
+        <select id="search-characterListDropdown"></select>
+        <input type="text" id="search-comicList" placeholder="Search for a comic">
+        <select id="search-comicListDropdown"></select>
+    </div>
 </body>
 
 </html>
