@@ -1,46 +1,58 @@
-// server.js file - Express Server, backend logic
+require('dotenv').config();
 
-// dependencies requiremetnts
+// Backend: Express server code (server.js or app.js)
 const express = require('express');
-const fetch = require('node-fetch');
-const dotenv = require('dotenv').config();
+const CryptoJS = require('crypto-js');
 const cors = require('cors');
 const logger = require('morgan');
-const CryptoJS = require('crypto-js');
 
-// configuring our express application
-const PORT = process.env.PORT || 3000;
+
 const app = express();
+const port = 3000;
 
-// loading the API keys from the .env file
-// also loading the API key variables that I need
-const ts = '1';
-const publicAPIKey = process.env.PUBLIC_API_KEY;
-const privateAPIKey = process.env.PRIVATE_API_KEY;
-const hash = CryptoJS.MD5(ts + privateAPIKey + publicAPIKey).toString();
-let url;
+// Set up environment variables (e.g. for API keys)
+const MARVEL_PUBLIC_API_KEY = process.env.PUBLIC_API_KEY;
+const MARVEL_PRIVATE_API_KEY = process.env.PRIVATE_API_KEY;
+const MARVEL_API_URL = 'https://gateway.marvel.com/v1/public/';
 
-// middleware pipelines
 app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 
-// routes
-// api fetching route
+// Set up the route to fetch Marvel data
 app.get('/api/getMarvelData', async (req, res) => {
-    const category = req.query.category;
-    console.log('Fetching data from: ' + category + '...');
-    url = `https://gateway.marvel.com/v1/public/${category}?ts=${ts}&apikey=${publicAPIKey}&hash=${hash}`;
+    const category = req.query.category; // Get category from query params
+    const offset = req.query.offset || 0; // Get offset from query params (default to 0)
+    const limit = req.query.limit || 10; // Get limit from query params (default to 10)
+
+    console.log(`Fetching data for category: ${category}`);
+
+    const ts = new Date().getTime(); // Timestamp for Marvel API
+    const hash = CryptoJS.MD5(ts + MARVEL_PRIVATE_API_KEY + MARVEL_PUBLIC_API_KEY).toString();
+    let url;
+
+    // Determine which Marvel endpoint to hit based on category
+    if (category === 'character') {
+        url = `${MARVEL_API_URL}characters?ts=${ts}&apikey=${MARVEL_PUBLIC_API_KEY}&hash=${hash}&offset=${offset}&limit=${limit}`;
+    } else if (category === 'comic') {
+        url = `${MARVEL_API_URL}comics?ts=${ts}&apikey=${MARVEL_PUBLIC_API_KEY}&hash=${hash}&offset=${offset}&limit=${limit}`;
+    } else {
+        return res.status(400).json({ error: 'Invalid category' });
+    }
+
     try {
         const response = await fetch(url);
         const data = await response.json();
-        res.json({results: data.data.results});
+        res.json(data); // Return data to frontend
     } catch (error) {
-        console.error('Error fetching data:', error);
         res.status(500).json({ error: 'Error fetching data from Marvel API' });
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+// Serve static files (e.g. HTML, JS, CSS)
+app.use(express.static('public')); // Assumes your frontend is in a 'public' folder
+
+// Start the server
+app.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}`);
 });

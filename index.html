@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-    <script defer src="js/main.js"></script>
+    <script defer src="public/main.js"></script>
     <title>Marvel Database</title>
 </head>
 
@@ -24,10 +24,11 @@
 
     <label for="categorySelect">Select a category:</label>
     <select id="categorySelect">
-        <option value="character">Character</option>
-        <option value="comic">Comic</option>
-        <option value="creator">Creator</option>
-        <option value="event">Event</option>
+        <option value="" disabled selected hidden>Category</option>
+        <option value="character">Characters</option>
+        <option value="comic">Comics</option>
+        <option value="creator">Creators</option>
+        <option value="event">Events</option>
         <option value="series">Series</option>
         <option value="story">Story</option>
     </select>
