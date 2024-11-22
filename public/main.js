@@ -35,7 +35,9 @@ characterList.addEventListener('change', () => {
         characterImg.alt = character.name;
         characterImg.style.width = '200px';
         characterImg.style.height = '200px';
+        characterImg.style.marginTop = '20px';
         document.body.appendChild(characterImg); // Append the image to the page
+        
     }
 });
 
