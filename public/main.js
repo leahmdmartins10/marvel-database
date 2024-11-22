@@ -97,6 +97,7 @@ async function fetchData(category) {
         const data = await response.json();
 
         if (category === 'character') {
+            console.log(data);
             characters = data.data.results;
             getCharacters();
             updateDropdown(characters, 'character');
@@ -119,14 +120,16 @@ async function getCharacters() {
     // in order to fetch ALL the characters we need to set an offset of 0
     let offset = 0; // starting point for the first request, it will update as we go
     let requests = [];
-    const limit = 20; // number of characters per request
     const totalCharacters = 1500; // total characters in database
-    const pagesToFetch = Math.ceil(totalCharacters / limit);
+    // const pagesToFetch = Math.ceil(totalCharacters / limit);
 
-    for(let page = 0; page < pagesToFetch; page++){
-        requests.push(fetch("http://localhost:3000/api/getMarvelData?category=character"+`&offset=${offset}&limit=${limit}`).then(response => response.json()));
-        offset += limit;
-    }
+    requests.push(fetch("http://localhost:3000/api/getMarvelData?category=character"+`&offset=${offset}&limit=${totalCharacters}`).then(response => response.json()));
+
+
+    // for(let page = 0; page < pagesToFetch; page++){
+    //     requests.push(fetch("http://localhost:3000/api/getMarvelData?category=character"+`&offset=${offset}&limit=${limit}`).then(response => response.json()));
+    //     offset += limit;
+    // }
 
     // waiting for all the requests to finish
     const results = await Promise.all(requests);
@@ -136,6 +139,7 @@ async function getCharacters() {
         characters = characters.concat(result.data.results);
     });
 
+    console.log(characters);
     // this is an attempt to make the API more efficient
     // by only fetching the data we need
     const fragment = document.createDocumentFragment(); // create a fragment to hold the data
