@@ -2,33 +2,21 @@
 
 // DOM elements
 const characterList = document.querySelector('#search-characterListDropdown');
-const comicList = document.querySelector('#search-comicListDropdown');
-
 const characterSearch = document.querySelector('#search-characterList');
-const comicSearch = document.querySelector('#search-comicList');
 
-const categorySelect = document.querySelector('#categorySelect');
 
 let characters = [];
 let comics = [];
 
-// Fetching data based on category selection
-categorySelect.addEventListener('change', () => {
-    const currentCategory = categorySelect.value;
-    console.log(`Fetching data for category: ${currentCategory}`);
-    fetchData(currentCategory); // Fetch data based on selected category
-    console.log("HERE");
-});
+// fetching the characters on the window load
+window.onload = () => {
+    fetchData('character');
+}
 
 // Search functionality for characters and comics
 characterSearch.addEventListener('input', () => {
     const query = characterSearch.value.toLowerCase();
     filteredSearch(query, 'character');
-});
-
-comicSearch.addEventListener('input', () => {
-    const query = comicSearch.value.toLowerCase();
-    filteredSearch(query, 'comic');
 });
 
 characterList.addEventListener('change', () => {
@@ -100,11 +88,8 @@ async function fetchData(category) {
             console.log(data);
             characters = data.data.results;
             getCharacters();
+            console.log(`Fetching Characters: ${characters}`);
             updateDropdown(characters, 'character');
-        } else if (category === 'comic') {
-            comics = data.data.results;
-            updateDropdown(comics, 'comic');
-            console.log('Finished fetching comics...');
         }
     } catch (error) {
         console.error('Error fetching data:', error);
@@ -120,16 +105,14 @@ async function getCharacters() {
     // in order to fetch ALL the characters we need to set an offset of 0
     let offset = 0; // starting point for the first request, it will update as we go
     let requests = [];
-    const totalCharacters = 1500; // total characters in database
-    // const pagesToFetch = Math.ceil(totalCharacters / limit);
+    let limit = 100;
+    const totalCharacters = 1540; // total characters in database
+    const pagesToFetch = Math.ceil(totalCharacters / limit);
 
-    requests.push(fetch("http://localhost:3000/api/getMarvelData?category=character"+`&offset=${offset}&limit=${totalCharacters}`).then(response => response.json()));
-
-
-    // for(let page = 0; page < pagesToFetch; page++){
-    //     requests.push(fetch("http://localhost:3000/api/getMarvelData?category=character"+`&offset=${offset}&limit=${limit}`).then(response => response.json()));
-    //     offset += limit;
-    // }
+    for(let page = 0; page < pagesToFetch; page++){
+        requests.push(fetch("http://localhost:3000/api/getMarvelData?category=character"+`&offset=${offset}&limit=${limit}`).then(response => response.json()));
+        offset += limit;
+    }
 
     // waiting for all the requests to finish
     const results = await Promise.all(requests);
@@ -139,7 +122,8 @@ async function getCharacters() {
         characters = characters.concat(result.data.results);
     });
 
-    console.log(characters);
+    console.log(`Characters: ${characters}`);
+
     // this is an attempt to make the API more efficient
     // by only fetching the data we need
     const fragment = document.createDocumentFragment(); // create a fragment to hold the data
@@ -154,19 +138,3 @@ async function getCharacters() {
 
     console.log('Leaving getCharacters...');
 }
-
-function toggleSelectors(category){
-    if (category === 'character') {
-        characterList.style.display = 'block';
-        characterSearch.style.display = 'block';
-        comicList.style.display = 'none';
-        comicSearch.style.display = 'none';
-    } else if (category === 'comic') {
-        characterList.style.display = 'none';
-        characterSearch.style.display = 'none';
-        comicList.style.display = 'block';
-        comicSearch.style.display = 'block';
-    }
-}
-
-toggleSelectors(categorySelect.value);

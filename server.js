@@ -23,7 +23,7 @@ app.use(express.json());
 app.get('/api/getMarvelData', async (req, res) => {
     const category = req.query.category; // Get category from query params
     const offset = req.query.offset || 0; // Get offset from query params (default to 0)
-
+    const limit = req.query.limit || 100; // Get limit from query params (default to 100)
 
     console.log(`Fetching data for category: ${category}`);
 
@@ -33,10 +33,8 @@ app.get('/api/getMarvelData', async (req, res) => {
 
     // Determine which Marvel endpoint to hit based on category
     if (category === 'character') {
-        url = `${MARVEL_API_URL}characters?ts=${ts}&apikey=${MARVEL_PUBLIC_API_KEY}&hash=${hash}&offset=${offset}&limit=1500`;
-    } else if (category === 'comic') {
-        url = `${MARVEL_API_URL}comics?ts=${ts}&apikey=${MARVEL_PUBLIC_API_KEY}&hash=${hash}&offset=${offset}`;
-    } else {
+        url = `${MARVEL_API_URL}characters?ts=${ts}&apikey=${MARVEL_PUBLIC_API_KEY}&hash=${hash}&offset=${offset}&limit=${limit}`;
+    }else{
         return res.status(400).json({ error: 'Invalid category' });
     }
 
