@@ -6,6 +6,9 @@ const CryptoJS = require('crypto-js');
 const cors = require('cors');
 const logger = require('morgan');
 
+const characterRouter = require('./routes/characters');
+const comicRouter = require('./routes/comics');
+
 
 const app = express();
 const port = 3000;
@@ -19,33 +22,15 @@ app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 
-// Set up the route to fetch Marvel data
-app.get('/api/getMarvelData', async (req, res) => {
-    const category = req.query.category; // Get category from query params
-    const offset = req.query.offset || 0; // Get offset from query params (default to 0)
-    const limit = req.query.limit || 100; // Get limit from query params (default to 100)
+app.get('/', (req, res) => {
+    res.send({msg: `Welcome to the database! The server is running on port ${port}`});
+})
 
-    console.log(`Fetching data for category: ${category}`);
+// Set up the route to fetch character data
+app.use('/getCharacters', characterRouter);
 
-    const ts = new Date().getTime(); // Timestamp for Marvel API
-    const hash = CryptoJS.MD5(ts + MARVEL_PRIVATE_API_KEY + MARVEL_PUBLIC_API_KEY).toString();
-    let url;
-
-    // Determine which Marvel endpoint to hit based on category
-    if (category === 'character') {
-        url = `${MARVEL_API_URL}characters?ts=${ts}&apikey=${MARVEL_PUBLIC_API_KEY}&hash=${hash}&offset=${offset}&limit=${limit}`;
-    }else{
-        return res.status(400).json({ error: 'Invalid category' });
-    }
-
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-        res.json(data); // Return data to frontend
-    } catch (error) {
-        res.status(500).json({ error: 'Error fetching data from Marvel API' });
-    }
-});
+// set up the route to fetch comic data
+app.use('/getComics', comicRouter);
 
 // Serve static files (e.g. HTML, JS, CSS)
 app.use(express.static('public')); // Assumes your frontend is in a 'public' folder
