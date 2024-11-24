@@ -3,9 +3,14 @@
 // DOM elements
 const characterList = document.querySelector("#search-characterListDropdown");
 const characterSearch = document.querySelector("#search-characterList");
+const comicsEl = document.querySelector("#seeComics");
+const seriesEl = document.querySelector("#seeSeries");
+const eventsEl = document.querySelector("#seeEvents");
 
 let characters = [];
 let comics = [];
+let series =[];
+let events =[];
 
 // fetching the characters on the window load
 window.onload = () => {
@@ -35,46 +40,8 @@ characterList.addEventListener("change", () => {
   // Clear existing character-related content
   clearCharacterContent();
 
-  console.log(`Character selected: ${selectedCharacterName}`);
-  const characterId = characterList.value;
-  const character = characters.find((character) => character.id === parseInt(characterId, 10));
-
-  if (!character) {
-    console.error("Character not found");
-    return;
-  }
-
-  // Create and append new image
-  const characterImg = document.createElement("img");
-  characterImg.src = `${character.thumbnail.path}.${character.thumbnail.extension}`;
-  characterImg.alt = character.name;
-  characterImg.style.width = "200px";
-  characterImg.style.height = "200px";
-  characterImg.style.marginTop = "20px";
-  document.body.appendChild(characterImg);
-
-  // Create a box for the description of the character
-  const descriptionBox = document.createElement("div");
-  descriptionBox.style.display = "flex";
-  descriptionBox.style.flexDirection = "column";
-  descriptionBox.style.alignItems = "center";
-  descriptionBox.style.marginTop = "20px";
-  descriptionBox.style.padding = "20px";
-  descriptionBox.style.background = "#fff";
-  descriptionBox.style.borderRadius = "8px";
-  descriptionBox.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.1)";
-  document.body.appendChild(descriptionBox);
-
-  const characterDescription = document.createElement("p");
-  characterDescription.textContent = character.description || "Description not available";
-  characterDescription.style.fontSize = "14px";
-  characterDescription.style.color = "#333";
-  characterDescription.style.textAlign = "center";
-  descriptionBox.appendChild(characterDescription);
-
-  console.log("Image updated:", characterImg.src);
-
-  console.log(`Now fetching relevant comics for ${selectedCharacterName}`);
+  // add character content
+  addCharacterContent();
 
   fetchData("Comic", characterId).then(() => {
     // Check if the existing ul exists and clear it, otherwise create a new one
@@ -142,13 +109,50 @@ function clearCharacterContent() {
     if (existingDescriptionBox) {
       existingDescriptionBox.remove();
     }
+}
+
+function addCharacterContent(){
+    console.log(`Character selected: ${selectedCharacterName}`);
+    const characterId = characterList.value;
+    const character = characters.find((character) => character.id === parseInt(characterId, 10));
   
-    // Remove existing comics list (target only comics-related ul)
-    const existingUl = document.querySelector("#comics-list");
-    if (existingUl) {
-      existingUl.remove();
+    if (!character) {
+      console.error("Character not found");
+      return;
     }
-  }
+  
+    // Create and append new image
+    const characterImg = document.createElement("img");
+    characterImg.src = `${character.thumbnail.path}.${character.thumbnail.extension}`;
+    characterImg.alt = character.name;
+    characterImg.style.width = "200px";
+    characterImg.style.height = "200px";
+    characterImg.style.marginTop = "20px";
+    document.body.appendChild(characterImg);
+  
+    // Create a box for the description of the character
+    const descriptionBox = document.createElement("div");
+    descriptionBox.style.display = "flex";
+    descriptionBox.style.flexDirection = "column";
+    descriptionBox.style.alignItems = "center";
+    descriptionBox.style.marginTop = "20px";
+    descriptionBox.style.padding = "20px";
+    descriptionBox.style.background = "#fff";
+    descriptionBox.style.borderRadius = "8px";
+    descriptionBox.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.1)";
+    document.body.appendChild(descriptionBox);
+  
+    const characterDescription = document.createElement("p");
+    characterDescription.textContent = character.description || "Description not available";
+    characterDescription.style.fontSize = "14px";
+    characterDescription.style.color = "#333";
+    characterDescription.style.textAlign = "center";
+    descriptionBox.appendChild(characterDescription);
+  
+    console.log("Image updated:", characterImg.src);
+  
+    console.log(`Now fetching relevant comics for ${selectedCharacterName}`);
+}
 
 // Function to filter and update dropdown based on search input
 function filteredSearch(query, type) {
