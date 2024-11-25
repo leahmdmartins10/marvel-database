@@ -46,6 +46,26 @@ header h1 {
     margin: 0;
 }
 
+/* Search area Styling */
+.search-area {
+    display: flex;
+    flex-direction: row; /* will align elements side by side */
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Adjust individual elements for consistent styling */
+.search-area input, 
+.search-area select {
+    flex: 1;
+    max-width: none;
+}
+
+.search-area button {
+    flex-shrink: 0;
+}
+
 /* Main Container */
 .container {
     max-width: 900px;

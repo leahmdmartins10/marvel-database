@@ -8,6 +8,8 @@ const logger = require('morgan');
 
 const characterRouter = require('./routes/characters');
 const comicRouter = require('./routes/comics');
+const eventRouter = require('./routes/events');
+const seriesRouter = require('./routes/series');
 
 
 const app = express();
@@ -31,6 +33,12 @@ app.use('/getCharacters', characterRouter);
 
 // set up the route to fetch comic data
 app.use('/getComics', comicRouter);
+
+// set up the route to fetch series data
+app.use('/getSeries', seriesRouter);
+
+// set up the route to fetch event data
+app.use('/getEvents', eventRouter);
 
 // Serve static files (e.g. HTML, JS, CSS)
 app.use(express.static('public')); // Assumes your frontend is in a 'public' folder

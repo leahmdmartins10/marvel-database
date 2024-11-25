@@ -3,6 +3,7 @@
 // DOM elements
 const characterList = document.querySelector("#search-characterListDropdown");
 const characterSearch = document.querySelector("#search-characterList");
+const clearButton = document.getElementById("clear-button");
 
 const comicsEl = document.getElementById("seeComics");
 const seriesEl = document.getElementById("seeSeries");
@@ -23,6 +24,17 @@ characterSearch.addEventListener("input", () => {
   const query = characterSearch.value.toLowerCase();
   filteredSearch(query, "Character");
 });
+
+// Function to clear everything
+clearButton.addEventListener("click", () => {
+    characterSearch.value = "";
+    comicsEl.disabled = true;
+    seriesEl.disabled = true;
+    eventsEl.disabled = true;
+    
+  clearCharacterContent();
+  clearDetails();
+})
 
 let lastSelectedCharID = null;
 
@@ -47,6 +59,9 @@ characterList.addEventListener("change", () => {
 
   // Clear existing character-related content
   clearCharacterContent();
+
+  // clear existing comics, events, series content
+  clearDetails();
 
   // add character content
   addCharacterContent();
@@ -233,6 +248,24 @@ characterList.addEventListener("change", () => {
   });
 });
 
+// function to clear comics, series, events content
+function clearDetails(){
+  const existingComics = document.querySelector("#comics-list");
+  if (existingComics) {
+    existingComics.remove();
+  }
+
+  const existingSeries = document.querySelector("#series-list");
+  if(existingSeries){
+    existingSeries.remove();
+  }
+
+  const existingEvents = document.querySelector("#events-list");
+  if(existingEvents){
+    existingEvents.remove();
+  }
+}
+
 // Function to clear only the character-related content (image, description, comics)
 function clearCharacterContent() {
   // Remove existing character image (target only image element that is not related to search or dropdown)
@@ -369,7 +402,7 @@ async function fetchData(category, characterID = null) {
       comics = data.data.results;
     }else if (category == "Series") {
       response = await fetch(
-        `http://localhost:3000/getSeries/get${category}sbyCharacter?characterId=${characterList.value}`
+        `http://localhost:3000/getSeries/get${category}byCharacter?characterId=${characterList.value}`
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
